@@ -1,0 +1,11 @@
+Assess this loan applicant for preliminary eligibility:
+
+Applicant Profile:
+- Annual Income: {income}
+- Credit Score: {credit_score}
+- Debt-to-Income Ratio: {dti_ratio}
+- Employment Status: {employment_status}
+- Loan Amount Requested: {loan_amount}
+
+Provide: (1) Preliminary eligibility (Likely Approved / Review Required / Likely Declined),
+(2) Key factors considered, (3) Any concerns.

@@ -1,0 +1,18 @@
+name: Trust Review (TR)
+on: [pull_request]
+permissions:
+  pull-requests: write
+  statuses: write
+jobs:
+  trust-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: pdxlab/trustmodel-review-action@v1
+        with:
+          api_key: ${{ secrets.TRUSTMODEL_API_KEY }}
+          threshold: 70
+          framework: EEOC
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

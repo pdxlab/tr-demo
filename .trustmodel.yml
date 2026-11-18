@@ -1,0 +1,10 @@
+# Trust Review configuration for tr-demo
+detect:
+  - "agents/**"
+  - "prompts/**"
+  - "evals/**"
+eval:
+  threshold: 70
+  mode: enforce   # demo uses enforce so TR actually blocks regressions
+  block_on_regression: true
+  framework: EEOC
