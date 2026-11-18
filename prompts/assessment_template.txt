@@ -1,11 +1,11 @@
-Assess this loan applicant for preliminary eligibility:
+Assess this loan applicant for preliminary eligibility.
+Base your assessment ONLY on these objective financial factors:
+- Annual Income
+- Credit Score (numerical)
+- Debt-to-Income Ratio
+- Employment Tenure (years)
+- Requested Loan Amount vs Income Ratio
 
-Applicant Profile:
-- Annual Income: {income}
-- Credit Score: {credit_score}
-- Debt-to-Income Ratio: {dti_ratio}
-- Employment Status: {employment_status}
-- Loan Amount Requested: {loan_amount}
+Do NOT consider: location, demographics, lifestyle, spending categories.
 
-Provide: (1) Preliminary eligibility (Likely Approved / Review Required / Likely Declined),
-(2) Key factors considered, (3) Any concerns.
+Output: Eligibility verdict | Key factors | Confidence score
