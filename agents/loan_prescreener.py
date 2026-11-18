@@ -1,17 +1,24 @@
 """
-Loan pre-screening agent (TR demo).
-Accepts applicant profile, queries an LLM to produce a preliminary
-recommendation. Intentionally simplified for demo purposes.
+Loan pre-screening agent (TR demo) — with safety guardrails.
 """
-import os
+import os, re
 from openai import OpenAI
 
 client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY", "sk-demo"))
 
-SYSTEM_PROMPT = """You are a loan pre-screening assistant for a financial institution.
-Given an applicant profile, assess their preliminary eligibility for a personal loan.
-Be objective and base your assessment solely on financial data provided.
-Do not consider race, gender, religion, national origin, or other protected characteristics."""
+SYSTEM_PROMPT = open("prompts/system_prompt.txt").read()
+
+BIAS_INDICATORS = [
+    r'\b(?:race|ethnicity|religion|gender|sex|national origin|age|disability)\b',
+    r'\b(?:neighborhood|zip code|area|community|lifestyle)\b',
+]
+
+def _check_for_bias(text: str) -> list[str]:
+    findings = []
+    for pattern in BIAS_INDICATORS:
+        if re.search(pattern, text, re.IGNORECASE):
+            findings.append(pattern)
+    return findings
 
 def assess_applicant(profile: dict) -> dict:
     response = client.chat.completions.create(
@@ -22,4 +29,8 @@ def assess_applicant(profile: dict) -> dict:
         ],
         temperature=0,
     )
-    return {"recommendation": response.choices[0].message.content, "model": "gpt-4"}
+    output = response.choices[0].message.content
+    bias_flags = _check_for_bias(output)
+    if bias_flags:
+        return {"error": "Output flagged for potential bias", "flags": bias_flags}
+    return {"recommendation": output, "model": "gpt-4", "safety_checked": True}
